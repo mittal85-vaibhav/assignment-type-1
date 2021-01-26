@@ -7,6 +7,7 @@ import createCache from '@emotion/cache';
 import theme from '../src/theme';
 import '../styles/index.css';
 import '../styles/index.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { withRouter } from 'next/router';
 
@@ -32,7 +33,7 @@ const MyApp = (props) => {
     <Provider store={store}>
       <CacheProvider value={cache}>
         <Head>
-          <title>My page</title>
+          <title>Serviced Apartments</title>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <ThemeProvider theme={theme}>
