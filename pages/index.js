@@ -19,10 +19,10 @@ export default class MainPage extends Component {
     return (
       <div className="container">
         <div className="row pt-4">
-          <div className="col-8">
-            <ApartmentType aptTypes={this.state.images}></ApartmentType>;
+          <div className="col-xs-12 col-md-8 p-4">
+            <ApartmentType aptTypes={this.state.images}></ApartmentType>
           </div>
-          <div className="col-4">
+          <div className="col-xs-12 col-md-4 p-4">
             <BookApartment aptTypes={this.state.images} />
           </div>
         </div>

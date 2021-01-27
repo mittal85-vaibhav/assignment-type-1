@@ -7,6 +7,12 @@ import SingleBedOutlined from '@material-ui/icons/SingleBedOutlined';
 import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined';
 import RoomIcon from '@material-ui/icons/RoomOutlined';
 import httpsWithQuality from '../../utils/httpsWithQuality';
+import classNames from 'classnames';
+import { connect } from 'react-redux';
+import {
+  selectAptType,
+  selectSlider,
+} from 'src/store/actions/apartmentActions';
 
 const Div = styled.div`
   background-color: rgb(246, 248, 248);
@@ -15,23 +21,33 @@ const Div = styled.div`
     width: 100%;
   }
 
-  div {
-    padding: 5px;
+  .slick-slide {
+    min-width: 300px !important ;
   }
 
   .sliderdiv {
+    padding: 5px;
     background-color: white;
+  }
+  .selected-border {
+    border: 1px solid red;
   }
 `;
 
-export default class Carousel extends Component {
+class Carousel extends Component {
   state = {
     show: false,
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedSlider != this.props.selectedSlider)
+      this.slider.slickGoTo(this.props.selectedSlider);
+  }
+
   selectType = (appType) => {
-    console.log(`Select type of apartment is ${appType.type}`);
-    this.props.selectApartment(appType);
+    this.props.setselectedAptTypeRedux(appType);
+    let selectedAptIndex = this.props.aptTypes.indexOf(appType);
+    this.props.selectSliderRedux(selectedAptIndex);
   };
 
   render() {
@@ -42,29 +58,39 @@ export default class Carousel extends Component {
       speed: 500,
       slidesToShow: 2,
       slidesToScroll: 1,
-      initialSlide: 0,
-      autoplay: true,
+      // initialSlide: 0,
+      autoplay: false,
       autoplaySpeed: 2000,
+      focusOnSelect: false,
+      swipeToSlide: true,
       responsive: [
         {
-          breakpoint: 1300,
+          breakpoint: 800,
           settings: {
-            slidesToShow: 2,
+            slidesToShow: 1,
             slidesToScroll: 1,
           },
         },
       ],
     };
+
     return (
       <div>
         <Div className="property-carousel">
-          <Slider {...settings} className="relative">
+          <Slider
+            {...settings}
+            className="relative"
+            ref={(slider) => (this.slider = slider)}
+          >
             {this.props.aptTypes.length &&
               this.props.aptTypes.map((appType, id) => (
                 <div
                   key={'slide#' + id}
                   onClick={() => this.selectType(appType)}
-                  className="sliderdiv"
+                  className={classNames({
+                    sliderdiv: true,
+                    'selected-border': id === this.props.selectedSlider,
+                  })}
                 >
                   <div className="row px-2">
                     <div className="col">
@@ -80,16 +106,17 @@ export default class Carousel extends Component {
                     <div className="col-4">
                       <b>{appType.price}</b>/night
                     </div>
-                    <div className="col-2">
+                    <div className="col-4 col-lg-3">
                       <SingleBedOutlined />: {appType.bedRooms}
                     </div>
-                    <div className="col-2">
+                    <div className="col-4 col-lg-3">
                       <BathtubOutlinedIcon /> {appType.restRooms}
                     </div>
                   </div>
+                  <hr></hr>
                   <div className="row  px-2">
-                    <div className="col-12">
-                      <RoomIcon /> Shibuya
+                    <div className="col-12" style={{ marginLeft: -5 }}>
+                      <RoomIcon fontSize="small" /> Shibuya
                     </div>
                     <div className="col-12">
                       Max residents: {appType.maxResidents}
@@ -103,3 +130,22 @@ export default class Carousel extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    selectedSlider: state.apartment.selectedSlider,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setselectedAptTypeRedux: (selectedAptType) => {
+      dispatch(selectAptType({ selectedAptType }));
+    },
+    selectSliderRedux: (selectedSlider) => {
+      dispatch(selectSlider({ selectedSlider }));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Carousel);

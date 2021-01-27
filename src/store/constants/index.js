@@ -5,3 +5,4 @@ export const AUTOFILL_TERM = 'AUTOFILL_TERM';
 export const UPDATE_FIELD_TERM = 'UPDATE_FIELD_TERM';
 
 export const SELECT_APT_TYPE = 'SELECT_APT_TYPE';
+export const SELECT_SLIDER = 'SELECT_SLIDER';

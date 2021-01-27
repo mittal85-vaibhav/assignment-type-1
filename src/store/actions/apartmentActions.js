@@ -1,9 +1,17 @@
-import { SELECT_APT_TYPE } from '../constants';
+import { SELECT_APT_TYPE, SELECT_SLIDER } from '../constants';
 
-// Clear errors
+// Select apartment type from carousel
 export const selectAptType = (selectedAptType) => {
   return {
     type: SELECT_APT_TYPE,
     selectedAptType: selectedAptType,
+  };
+};
+
+// Select apartment type from dropdown
+export const selectSlider = (selectedSlider) => {
+  return {
+    type: SELECT_SLIDER,
+    selectedSlider: selectedSlider,
   };
 };
